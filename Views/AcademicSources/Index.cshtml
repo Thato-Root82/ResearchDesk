@@ -1,0 +1,56 @@
+﻿@model List<ResearchDesk.Models.AcademicSource>
+@{
+    ViewData["Title"] = "Academic Sources";
+    var returnUrl = Url.Action("Index", "AcademicSources");
+}
+
+<h2><span class="emoji">📖</span> Academic Sources</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+
+<a asp-action="Create" asp-route-returnUrl="@returnUrl" class="btn btn-primary mb-3">
+    <span class="emoji">➕</span> Add Academic Source
+</a>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Year</th>
+                <th><span class="emoji">📋</span> Harvard Reference</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var source in Model)
+            {
+                <tr>
+                    <td>@source.Title</td>
+                    <td>@source.Authors</td>
+                    <td>@source.Year</td>
+                    <td><code style="font-size: 11px;">@source.GetHarvardReference()</code></td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@source.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@source.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+}
+else
+{
+    <p class="text-muted text-center"><span class="emoji">📖</span> No sources yet. Add your first one!</p>
+}
+
+<a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary mt-3">
+    <span class="emoji">←</span> Back to Dashboard
+</a>

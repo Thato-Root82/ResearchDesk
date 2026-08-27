@@ -1,0 +1,158 @@
+﻿@model ResearchDesk.Models.Assignment
+@{
+    ViewData["Title"] = Model.Title;
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<!-- MAIN ASSIGNMENT CARD -->
+<div class="card assignment-details-card mb-4">
+    <div class="card-header">
+        <h2 class="mb-0"><span class="emoji">📄</span> @Model.Title</h2>
+        <p class="mb-0 text-muted" style="color: #ccc !important;">
+            <span class="emoji">📅</span> Due: @Model.DueDate.ToShortDateString()
+            @if (!string.IsNullOrEmpty(Model.UniqueNumber))
+            {
+                <span class="ms-3"><span class="emoji">🔢</span> @Model.UniqueNumber</span>
+            }
+            <span class="ms-3"><span class="emoji">⭐</span> @Model.TotalMarks marks</span>
+        </p>
+    </div>
+    <div class="card-body">
+
+        <!-- AI SOURCES -->
+        <div class="card sub-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><span class="emoji">🤖</span> AI Sources</h5>
+                <a asp-action="Create" asp-controller="AISources"
+                   asp-route-assignmentId="@Model.Id"
+                   asp-route-returnUrl="@currentUrl"
+                   class="btn btn-sm btn-primary"><span class="emoji">➕</span> Add AI Log</a>
+            </div>
+            <div class="card-body">
+                @if (Model.AISources.Any())
+                {
+                    <ul class="detail-list">
+                        @foreach (var ai in Model.AISources)
+                        {
+                            <li>
+                                <span class="item-content">
+                                    <strong>@ai.ToolName</strong> – @ai.QuestionAsked
+                                </span>
+                                <span class="item-actions">
+                                    <a asp-action="Edit" asp-controller="AISources"
+                                       asp-route-id="@ai.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-controller="AISources"
+                                       asp-route-id="@ai.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-danger">Delete</a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">No AI sources logged yet.</p>
+                }
+            </div>
+        </div>
+
+        <!-- ACADEMIC SOURCES -->
+        <div class="card sub-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><span class="emoji">📖</span> Academic Sources</h5>
+                <a asp-action="Create" asp-controller="AcademicSources"
+                   asp-route-assignmentId="@Model.Id"
+                   asp-route-returnUrl="@currentUrl"
+                   class="btn btn-sm btn-primary"><span class="emoji">➕</span> Add Source</a>
+            </div>
+            <div class="card-body">
+                @if (Model.AcademicSources.Any())
+                {
+                    <ul class="detail-list">
+                        @foreach (var src in Model.AcademicSources)
+                        {
+                            <li>
+                                <span class="item-content">
+                                    <strong>@src.Title</strong> (@src.Year)
+                                    <span class="text-muted" style="display: block; font-size: 0.85rem;">
+                                        @src.Authors
+                                    </span>
+                                </span>
+                                <span class="item-actions">
+                                    <a asp-action="Edit" asp-controller="AcademicSources"
+                                       asp-route-id="@src.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-controller="AcademicSources"
+                                       asp-route-id="@src.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-danger">Delete</a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">No academic sources added yet.</p>
+                }
+            </div>
+        </div>
+
+        <!-- NOTES -->
+        <div class="card sub-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><span class="emoji">📝</span> Notes</h5>
+                <a asp-action="Create" asp-controller="Notes"
+                   asp-route-assignmentId="@Model.Id"
+                   asp-route-returnUrl="@currentUrl"
+                   class="btn btn-sm btn-primary"><span class="emoji">➕</span> Add Note</a>
+            </div>
+            <div class="card-body">
+                @if (Model.Notes.Any())
+                {
+                    <ul class="detail-list">
+                        @foreach (var note in Model.Notes)
+                        {
+                            <li>
+                                <span class="item-content">
+                                    @note.Content.Substring(0, Math.Min(80, note.Content.Length))...
+                                    <span class="text-muted" style="display: block; font-size: 0.8rem;">
+                                        <span class="emoji">🕐</span> @note.CreatedAt.ToString("g")
+                                    </span>
+                                </span>
+                                <span class="item-actions">
+                                    <a asp-action="Edit" asp-controller="Notes"
+                                       asp-route-id="@note.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-controller="Notes"
+                                       asp-route-id="@note.Id"
+                                       asp-route-returnUrl="@currentUrl"
+                                       class="btn btn-sm btn-danger">Delete</a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">No notes yet.</p>
+                }
+            </div>
+        </div>
+
+        <!-- HARVARD REFERENCES SECTION -->
+        <div class="mt-4">
+            @await Html.PartialAsync("_HarvardReferences", Model)
+        </div>
+
+    </div> <!-- /card-body -->
+    <div class="card-footer text-center">
+        <a asp-action="Index" class="btn btn-secondary"><span class="emoji">←</span> Back to Assignments</a>
+        <a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary ms-2"><span class="emoji">←</span> Dashboard</a>
+    </div>
+</div>

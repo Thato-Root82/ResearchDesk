@@ -1,0 +1,35 @@
+﻿@model ResearchDesk.Models.Framework
+@{
+    ViewData["Title"] = "Add Framework";
+    var returnUrl = ViewBag.ReturnUrl as string;
+}
+<div class="container mt-4">
+    <h2><span class="emoji">➕</span> Add New Framework</h2>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Source Citation</label>
+            <textarea asp-for="SourceCitation" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success"><span class="emoji">💾</span> Save</button>
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <a href="@returnUrl" class="btn btn-secondary">Cancel</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        }
+    </form>
+</div>

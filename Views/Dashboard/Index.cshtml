@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var upcoming = ViewBag.Upcoming as List<ResearchDesk.Models.Assignment>;
+    var recentNotes = ViewBag.RecentNotes as List<ResearchDesk.Models.Note>;
+}
+
+<!-- HERO / GREETING -->
+<div class="card dashboard-hero mb-4">
+    <div class="card-body">
+        <h1 class="display-4"> Welcome to ResearchDesk</h1>
+        <p class="lead">Your academic companion. Manage assignments, track AI usage, and organise your sources.</p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap">
+            <a asp-action="Create" asp-controller="Assignments" class="btn btn-primary" id="added_new"> ➕ New Assignment</a>
+        </div>
+    </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="number">@(upcoming?.Count ?? 0)</div>
+        <div><span class="emoji">📅</span> Upcoming</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">@(recentNotes?.Count ?? 0)</div>
+        <div><span class="emoji">📝</span> Recent Notes</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">@ViewBag.TotalAssignments</div>
+        <div><span class="emoji">📚</span> Total Assignments</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT: 2 columns -->
+<div class="row">
+    <!-- UPCOMING ASSIGNMENTS -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="mb-0"><span class="emoji">📅</span> Upcoming Assignments</h4>
+            </div>
+            <div class="card-body">
+                @if (upcoming != null && upcoming.Any())
+                {
+                    <ul class="detail-list">
+                        @foreach (var a in upcoming)
+                        {
+                            <li>
+                                <span class="item-content">
+                                    <strong>@a.Title</strong><br />
+                                    <span class="text-muted" style="font-size:0.85rem;">
+                                        <span class="emoji">📅</span> Due: @a.DueDate.ToShortDateString()
+                                    </span>
+                                </span>
+                                <span class="item-actions">
+                                    <a asp-action="Details" asp-controller="Assignments" asp-route-id="@a.Id" class="btn btn-sm btn-primary">View</a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted text-center"><span class="emoji">🎉</span> No upcoming assignments. Enjoy the break!</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- RECENT NOTES -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="mb-0"><span class="emoji">📝</span> Recent Notes</h4>
+            </div>
+            <div class="card-body">
+                @if (recentNotes != null && recentNotes.Any())
+                {
+                    <ul class="detail-list">
+                        @foreach (var n in recentNotes)
+                        {
+                            <li>
+                                <span class="item-content">
+                                    @n.Content.Substring(0, Math.Min(80, n.Content.Length))...
+                                    <span class="text-muted" style="display:block; font-size:0.8rem;">
+                                        <span class="emoji">🕐</span> @n.CreatedAt.ToString("g")
+                                    </span>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted text-center"><span class="emoji">📝</span> No notes yet. Start jotting down ideas!</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

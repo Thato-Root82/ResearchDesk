@@ -1,0 +1,44 @@
+﻿@model List<ResearchDesk.Models.Note>
+@{
+    ViewData["Title"] = "Notes";
+    var returnUrl = Url.Action("Index", "Notes");
+}
+
+<h2><span class="emoji">📝</span> All Notes</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+
+<a asp-action="Create" asp-route-returnUrl="@returnUrl" class="btn btn-primary mb-3">
+    <span class="emoji">➕</span> Add Note
+</a>
+
+@if (Model.Any())
+{
+    @foreach (var note in Model.OrderByDescending(n => n.CreatedAt))
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@note.Content.Substring(0, Math.Min(60, note.Content.Length))...</h5>
+                <p class="card-text">@note.Content</p>
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                <span><span class="emoji">🕐</span> @note.CreatedAt.ToString("g")</span>
+                <span>
+                    <a asp-action="Edit" asp-route-id="@note.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@note.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-danger">Delete</a>
+                </span>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p class="text-muted text-center"><span class="emoji">📝</span> No notes yet. Start writing!</p>
+}
+
+<a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary mt-3">
+    <span class="emoji">←</span> Back to Dashboard
+</a>

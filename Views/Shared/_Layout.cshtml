@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ResearchDesk</title>
+
+    <!-- LOCAL CSS ONLY (No CDN) -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        /* Ensure navbar always visible offline */
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            min-height: calc(100vh - 200px);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"> ResearchDesk</a>
+            <button class="navbar-toggler" type="button" onclick="toggleNav()">
+                ☰
+            </button>
+            <div class="navbar-nav" id="navMenu">
+                <a class="nav-link" href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+                <a class="nav-link" href="@Url.Action("Index", "Assignments")">Assignments</a>
+                <a class="nav-link" href="@Url.Action("Index", "Frameworks")">Frameworks</a>
+                <a class="nav-link" href="@Url.Action("Index", "AISources")">AI Logs</a>
+                <a class="nav-link" href="@Url.Action("Index", "AcademicSources")">Sources</a>
+                <a class="nav-link" href="@Url.Action("Index", "Notes")">Notes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container main-content">
+        <!-- Success Message -->
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["msg"]
+                <button type="button" class="btn-close" onclick="this.parentElement.style.display='none';"></button>
+            </div>
+        }
+
+        <!-- Page Content -->
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>ResearchDesk — Academic research companion</p>
+        <small>© 2026 | All rights reserved</small>
+    </footer>
+
+    <!-- LOCAL JAVASCRIPT ONLY (No CDN) -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Mobile menu toggle
+        function toggleNav() {
+            const navMenu = document.getElementById('navMenu');
+            if (navMenu.style.display === 'flex') {
+                navMenu.style.display = 'none';
+            } else {
+                navMenu.style.display = 'flex';
+            }
+        }
+
+        // Close menu when link clicked
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').style.display = 'none';
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

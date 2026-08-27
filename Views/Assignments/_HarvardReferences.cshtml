@@ -1,0 +1,109 @@
+﻿@model ResearchDesk.Models.Assignment
+
+@{
+    var includeFrameworks = ViewBag.IncludeFrameworks ?? false;
+}
+
+<div class="card references-card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><span class="emoji">📚</span> Harvard References</h4>
+        <button id="copyAllReferencesBtn" class="btn btn-sm btn-primary"><span class="emoji">📋</span> Copy All</button>
+    </div>
+    <div class="card-body">
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="includeFrameworksCheckbox"
+                   @(includeFrameworks ? "checked" : "") />
+            <label class="form-check-label" for="includeFrameworksCheckbox">
+                <span class="emoji">✔</span> Include policy frameworks in references
+            </label>
+        </div>
+
+        <div id="referencesContainer">
+            @if (Model.AISources != null && Model.AISources.Any())
+            {
+                <h5><span class="emoji">🤖</span> AI Tools</h5>
+                <ul class="reference-list">
+                    @foreach (var ai in Model.AISources)
+                    {
+                        var refText = ResearchDesk.Models.HarvardReferenceHelper.GetReference(ai);
+                        <li>
+                            <span class="ref-text">@refText</span>
+                            <button class="btn btn-sm btn-outline-secondary copy-ref-btn" data-ref="@refText"><span class="emoji">📋</span> Copy</button>
+                        </li>
+                    }
+                </ul>
+            }
+
+            @if (Model.AcademicSources != null && Model.AcademicSources.Any())
+            {
+                <h5><span class="emoji">📖</span> Academic Sources</h5>
+                <ul class="reference-list">
+                    @foreach (var src in Model.AcademicSources)
+                    {
+                        var refText = ResearchDesk.Models.HarvardReferenceHelper.GetReference(src);
+                        <li>
+                            <span class="ref-text">@refText</span>
+                            <button class="btn btn-sm btn-outline-secondary copy-ref-btn" data-ref="@refText"><span class="emoji">📋</span> Copy</button>
+                        </li>
+                    }
+                </ul>
+            }
+
+            @if (includeFrameworks)
+            {
+                var frameworks = ViewBag.AllFrameworks as List<ResearchDesk.Models.Framework>;
+                if (frameworks != null && frameworks.Any())
+                {
+                    <h5><span class="emoji">🏛️</span> Policy Frameworks</h5>
+                    <ul class="reference-list">
+                        @foreach (var fw in frameworks)
+                        {
+                            var refText = ResearchDesk.Models.HarvardReferenceHelper.GetReference(fw);
+                            <li>
+                                <span class="ref-text">@refText</span>
+                                <button class="btn btn-sm btn-outline-secondary copy-ref-btn" data-ref="@refText"><span class="emoji">📋</span> Copy</button>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            // success
+        }).catch(err => console.error('Copy failed', err));
+    }
+
+    document.querySelectorAll('.copy-ref-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const ref = btn.getAttribute('data-ref');
+            copyToClipboard(ref);
+            const original = btn.innerText;
+            btn.innerText = '✅ All Copied!';
+            setTimeout(() => btn.innerText = original, 1500);
+        });
+    });
+
+    document.getElementById('copyAllReferencesBtn')?.addEventListener('click', () => {
+        const allRefs = Array.from(document.querySelectorAll('#referencesContainer .ref-text'))
+                           .map(span => span.innerText.trim())
+                           .join('\n\n');
+        if (allRefs) {
+            copyToClipboard(allRefs);
+            const btn = document.getElementById('copyAllReferencesBtn');
+            const original = btn.innerText;
+            btn.innerText = '✅ All Copied!';
+            setTimeout(() => btn.innerText = original, 2000);
+        }
+    });
+
+    document.getElementById('includeFrameworksCheckbox')?.addEventListener('change', function(e) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('includeFrameworks', e.target.checked ? 'true' : 'false');
+        window.location.href = url.toString();
+    });
+</script>

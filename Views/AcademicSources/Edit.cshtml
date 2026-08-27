@@ -1,0 +1,73 @@
+﻿@model ResearchDesk.Models.AcademicSource
+@{
+    ViewData["Title"] = "Edit Academic Source";
+    var returnUrl = ViewBag.ReturnUrl as string;
+    var assignments = ViewBag.Assignments as List<ResearchDesk.Models.Assignment>;
+}
+<div class="container mt-4">
+    <h2>✏ Edit Academic Source</h2>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+        <div class="mb-3">
+            <label class="form-label">Assignment</label>
+            <select asp-for="AssignmentId" class="form-control" required>
+                @if (assignments != null)
+                {
+                    foreach (var a in assignments)
+                    {
+                        <option value="@a.Id" selected="@(a.Id == Model.AssignmentId)">@a.Title</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Author(s)</label>
+            <input asp-for="Authors" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Year</label>
+            <input asp-for="Year" type="number" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Publisher (for books)</label>
+            <input asp-for="Publisher" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Journal Name (if article)</label>
+            <input asp-for="JournalName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Volume</label>
+            <input asp-for="Volume" type="number" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Issue</label>
+            <input asp-for="Issue" type="number" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Page Range (e.g. 45-67)</label>
+            <input asp-for="PageRange" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">URL</label>
+            <input asp-for="Url" type="url" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <a href="@returnUrl" class="btn btn-secondary">Cancel</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        }
+    </form>
+</div>

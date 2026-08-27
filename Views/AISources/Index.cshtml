@@ -1,0 +1,52 @@
+﻿@model List<ResearchDesk.Models.AISource>
+@{
+    ViewData["Title"] = "AI Logs";
+    var returnUrl = Url.Action("Index", "AISources");
+}
+
+<h2><span class="emoji">🤖</span> AI Usage Logs</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+
+<a asp-action="Create" asp-route-returnUrl="@returnUrl" class="btn btn-primary mb-3">
+    <span class="emoji">➕</span> Log New AI Usage
+</a>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var ai in Model.OrderByDescending(a => a.DateUsed))
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><span class="emoji">🧠</span> @ai.ToolName</h5>
+                        <p class="card-text">
+                            <strong><span class="emoji">❓</span> Q:</strong> @ai.QuestionAsked<br />
+                            <strong><span class="emoji">💬</span> A:</strong> @ai.AIResponse.Substring(0, Math.Min(120, ai.AIResponse.Length))...
+                        </p>
+                        <small class="text-muted"><span class="emoji">🕐</span> @ai.DateUsed.ToShortDateString()</small>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <span></span>
+                        <span>
+                            <a asp-action="Edit" asp-route-id="@ai.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@ai.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-danger">Delete</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted text-center"><span class="emoji">🤖</span> No AI logs yet. Log your first AI usage!</p>
+}
+
+<a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary mt-3">
+    <span class="emoji">←</span> Back to Dashboard
+</a>

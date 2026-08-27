@@ -1,0 +1,56 @@
+﻿@model ResearchDesk.Models.AISource
+@{
+    ViewData["Title"] = "Edit AI Log";
+    var returnUrl = ViewBag.ReturnUrl as string;
+    var assignments = ViewBag.Assignments as List<ResearchDesk.Models.Assignment>;
+}
+<div class="container mt-4">
+    <h2>✏ Edit AI Log</h2>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+        <div class="mb-3">
+            <label class="form-label">Assignment</label>
+            <select asp-for="AssignmentId" class="form-control" required>
+                @if (assignments != null)
+                {
+                    foreach (var a in assignments)
+                    {
+                        <option value="@a.Id" selected="@(a.Id == Model.AssignmentId)">@a.Title</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tool Name</label>
+            <input asp-for="ToolName" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Question Asked</label>
+            <textarea asp-for="QuestionAsked" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">AI Response</label>
+            <textarea asp-for="AIResponse" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date Used</label>
+            <input asp-for="DateUsed" type="date" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <a href="@returnUrl" class="btn btn-secondary">Cancel</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        }
+    </form>
+</div>
