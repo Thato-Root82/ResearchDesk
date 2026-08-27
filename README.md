@@ -158,15 +158,7 @@ ResearchDesk/
 
 ---
 
-## 🔮 Future Improvements
 
-- [ ] Export references to Word/PDF
-- [ ] User authentication with roles
-- [ ] Cloud deployment (Azure)
-- [ ] API endpoints for mobile integration
-- [ ] Dark mode toggle
-
----
 
 ## 🙋‍♂️ About The Developer
 
