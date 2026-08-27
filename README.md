@@ -6,13 +6,6 @@
 
 ---
 
-## 🚀 Live Demo
-
-🔗 **This app runs 100% offline** — no internet required after download.  
-
-
----
-
 ## 📋 About The Project
 
 ResearchDesk is a comprehensive academic management tool designed to help students and researchers organise their work. It allows users to:
@@ -89,21 +82,6 @@ Runs entirely locally. No internet connection required.
 
 ---
 
-## 📦 Offline Version (For Non-Technical Users)
-
-If you just want to **use** the app without setting up a development environment:
-
-1. **Download the `publish` folder** from this repository
-2. Open the folder and double-click **`Start ResearchDesk.bat`**
-3. A black window will open — **keep it open**
-4. Your browser will open automatically to `http://localhost:5000`
-
-**To close:** Close the browser, then close the black window.
-
-> ⚠️ If Windows shows "Windows protected your PC", click **"More info"** → **"Run anyway"**
-
----
-
 ## 🏃‍♂️ For Developers — Getting Started
 
 ### Prerequisites
@@ -113,21 +91,33 @@ If you just want to **use** the app without setting up a development environment
 ### Installation
 
 1. Clone the repository
-git clone https://github.com/Thato-Root82/ResearchDesk.git
+   ```bash
+   git clone https://github.com/Thato-Root82/ResearchDesk.git
+   ```
 
 2. Navigate to the project directory
-cd ResearchDesk
+   ```bash
+   cd ResearchDesk
+   ```
 
 3. Restore dependencies
-dotnet restore
+   ```bash
+   dotnet restore
+   ```
 
 4. Apply database migrations
-dotnet ef database update
+   ```bash
+   dotnet ef database update
+   ```
 
 5. Run the application
-dotnet run
+   ```bash
+   dotnet run
+   ```
 
-6. Open your browser and go to https://localhost:5001
+6. Open your browser and go to `https://localhost:5001`
+
+---
 
 ## 🚀 How to Build the Standalone App
 
@@ -140,10 +130,12 @@ dotnet run
    ```
 
 4. The standalone `.exe` will be in the `publish` folder. Run `ResearchDesk.exe` to start the app.
+
 ---
 
 ## 📁 Project Structure
 
+```
 ResearchDesk/
 ├── Controllers/          # MVC Controllers
 │   ├── AssignmentsController.cs
@@ -162,6 +154,7 @@ ResearchDesk/
 ├── Views/                # Razor views
 ├── wwwroot/              # Static files (CSS, JS)
 └── Program.cs            # Application entry point
+```
 
 ---
 
@@ -188,6 +181,3 @@ ResearchDesk/
 ## 📄 License
 
 This project is open source and available under the MIT License.
-
----
-
