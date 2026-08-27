@@ -129,6 +129,17 @@ dotnet run
 
 6. Open your browser and go to https://localhost:5001
 
+## 🚀 How to Build the Standalone App
+
+1. Install the .NET 9 SDK from [https://dotnet.microsoft.com/](https://dotnet.microsoft.com/)
+2. Open a terminal in the project folder (`ResearchDesk`)
+3. Run:
+
+   ```bash
+   dotnet publish -c Release -r win-x64 --self-contained true -o ./publish
+   ```
+
+4. The standalone `.exe` will be in the `publish` folder. Run `ResearchDesk.exe` to start the app.
 ---
 
 ## 📁 Project Structure
